@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS aave.aave_interest (
     variable_borrow_apy numeric,
     daily_deposit_apr numeric,
     daily_stable_borrow_apr numeric,
-    daily_variable_borrow_apr numeric
+    daily_variable_borrow_apr numeric,
+    PRIMARY KEY (version, reserve, day)
     
 );
 
