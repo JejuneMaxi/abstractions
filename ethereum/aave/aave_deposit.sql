@@ -161,7 +161,10 @@ LEFT JOIN erc20."tokens" erc20
 LEFT JOIN prices.usd p 
     ON p.minute = date_trunc('minute', deposit.evt_block_time) 
     AND p.contract_address = deposit.contract_address
-
+WHERE deposit.evt_block_time >= start_ts
+AND deposit.evt_block_time < end_ts
+AND deposit.evt_block_number >= start_block
+AND deposit.evt_block_number < end_block
     ))
     ON CONFLICT DO NOTHING
     RETURNING 1
