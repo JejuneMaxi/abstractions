@@ -90,7 +90,10 @@ LEFT JOIN (
     FROM erc20.tokens
 ) erc20tokens
 ON i.reserve = erc20tokens.contract_address  
-    
+WHERE i.evt_block_time >= start_ts
+AND i.evt_block_time < end_ts
+AND i.evt_block_number >= start_block
+AND i.evt_block_number < end_block     
     ))
     ON CONFLICT DO NOTHING
     RETURNING 1
