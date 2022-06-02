@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS aave.aave_borrow (
     evt_tx_hash bytea,
     evt_index integer,
     evt_block_time timestamptz,
-    evt_block_number numeric
+    evt_block_number numeric,
+    PRIMARY KEY (evt_tx_hash, evt_index)
 );
 
 CREATE OR REPLACE FUNCTION aave.insert_aave_borrow(start_ts timestamptz, end_ts timestamptz=now(), start_block numeric=0, end_block numeric=9e18) RETURNS integer
@@ -168,6 +169,10 @@ LEFT JOIN erc20."tokens" erc20
 LEFT JOIN prices.usd p 
     ON p.minute = date_trunc('minute', borrow.evt_block_time) 
     AND p.contract_address = borrow.contract_address
+WHERE borrow.evt_block_time >= start_ts
+AND borrow.evt_block_time < end_ts
+AND borrow.evt_block_number >= start_block
+AND borrow.evt_block_number < end_block 
     ))
     ON CONFLICT DO NOTHING
     RETURNING 1
